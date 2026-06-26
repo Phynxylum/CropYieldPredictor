@@ -10,6 +10,22 @@ import pickle
 import os
 import plotly.express as px
 import plotly.graph_objects as go
+import subprocess
+import sys
+
+# ─── AUTO-TRAIN MODEL IF NOT EXISTS ──────────────────────────────────────────
+if not os.path.exists("model.pkl"):
+    st.info("⏳ Melatih model untuk pertama kali... Ini membutuhkan waktu ~1-2 menit.")
+    try:
+        result = subprocess.run([sys.executable, "model.py"], capture_output=True, text=True, timeout=300)
+        if result.returncode == 0:
+            st.success("✅ Model berhasil dilatih! Refresh halaman untuk memulai.")
+        else:
+            st.error(f"❌ Gagal melatih model:\n{result.stderr}")
+    except subprocess.TimeoutExpired:
+        st.error("⏱️ Pelatihan model timeout (>5 menit)")
+    except Exception as e:
+        st.error(f"❌ Error saat melatih model: {str(e)}")
 
 # ─── KONFIGURASI HALAMAN ──────────────────────────────────────────────────────
 st.set_page_config(
