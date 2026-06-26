@@ -14,6 +14,12 @@ import plotly.graph_objects as go
 import subprocess
 import sys
 
+# ─── DEBUG: Check working directory and files ─────────────────────────────────
+print(f"📂 Working directory: {os.getcwd()}")
+print(f"📁 Files in directory: {os.listdir('.')}")
+print(f"✓ yield_df.csv exists: {os.path.exists('yield_df.csv')}")
+print(f"✓ model.joblib exists: {os.path.exists('model.joblib')}")
+
 # ─── AUTO-TRAIN MODEL IF NOT EXISTS ──────────────────────────────────────────
 if not os.path.exists("model.joblib"):
     st.info("⏳ Melatih model untuk pertama kali... Ini membutuhkan waktu ~1-2 menit.")
