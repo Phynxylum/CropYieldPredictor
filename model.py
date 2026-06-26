@@ -10,6 +10,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import mean_absolute_error, r2_score
 import pickle
+import joblib
 import os
 
 # ─── LOAD DATASET ─────────────────────────────────────────────────────────────
@@ -100,16 +101,15 @@ def train(df, encoders, cat_cols):
 
 # ─── SIMPAN MODEL ─────────────────────────────────────────────────────────────
 def save_artifacts(model, encoders, feature_cols, importances):
-    """Simpan model dan encoder ke file .pkl."""
+    """Simpan model dan encoder ke file .joblib (compressed)."""
     payload = {
         "model"        : model,
         "encoders"     : encoders,
         "feature_cols" : feature_cols,
         "importances"  : importances,
     }
-    with open("model.pkl", "wb") as f:
-        pickle.dump(payload, f)
-    print("\n✅ Model tersimpan di 'model.pkl'")
+    joblib.dump(payload, "model.joblib", compress=3)
+    print("\n✅ Model tersimpan di 'model.joblib' (compressed)")
 
 
 # ─── MAIN ─────────────────────────────────────────────────────────────────────

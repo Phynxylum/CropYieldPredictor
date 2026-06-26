@@ -7,6 +7,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import pickle
+import joblib
 import os
 import plotly.express as px
 import plotly.graph_objects as go
@@ -14,7 +15,7 @@ import subprocess
 import sys
 
 # ─── AUTO-TRAIN MODEL IF NOT EXISTS ──────────────────────────────────────────
-if not os.path.exists("model.pkl"):
+if not os.path.exists("model.joblib"):
     st.info("⏳ Melatih model untuk pertama kali... Ini membutuhkan waktu ~1-2 menit.")
     try:
         result = subprocess.run([sys.executable, "model.py"], capture_output=True, text=True, timeout=300)
@@ -401,10 +402,9 @@ st.markdown("""
 # ─── LOAD MODEL & DATA ──────────────────────────────────────────────────────
 @st.cache_resource
 def load_model():
-    if not os.path.exists("model.pkl"):
+    if not os.path.exists("model.joblib"):
         return None
-    with open("model.pkl", "rb") as f:
-        return pickle.load(f)
+    return joblib.load("model.joblib")
 
 @st.cache_data
 def load_raw_data():
