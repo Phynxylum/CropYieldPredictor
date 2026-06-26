@@ -408,11 +408,18 @@ def load_model():
 
 @st.cache_data
 def load_raw_data():
-    if not os.path.exists("yield_df.csv"):
+    try:
+        if not os.path.exists("yield_df.csv"):
+            print("❌ yield_df.csv tidak ditemukan")
+            return None
+        df = pd.read_csv("yield_df.csv")
+        drop_cols = [c for c in ["Unnamed: 0"] if c in df.columns]
+        result = df.drop(columns=drop_cols).dropna()
+        print(f"✅ Dataset berhasil dimuat: {len(result)} baris")
+        return result
+    except Exception as e:
+        print(f"❌ Error loading dataset: {str(e)}")
         return None
-    df = pd.read_csv("yield_df.csv")
-    drop_cols = [c for c in ["Unnamed: 0"] if c in df.columns]
-    return df.drop(columns=drop_cols).dropna()
 
 artifacts = load_model()
 raw_df = load_raw_data()
